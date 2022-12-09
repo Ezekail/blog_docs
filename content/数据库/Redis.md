@@ -1,4 +1,12 @@
-
+~~~json
+```
+    ```json
+    {
+        "date":"2022.12.09 15:33"，
+    }
+    ```
+```
+~~~
 
 # Redis
 
@@ -107,7 +115,7 @@ getset <key><value>：以新换旧，设置了新值同时获得旧值。
 
 当字符串长度小于1M时，扩容都是加倍现有的空间，如果超过1M，扩容时只会多扩1M的空间，字符串最大长度是512M
 
-![img](https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241239397.png)
+![img](./assets/images/202206241239397.png)
 
 ### 列表 list
 
