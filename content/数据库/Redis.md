@@ -1,7 +1,8 @@
 ```json
 {
   "date": "2022.12.9 16:30",
-  "title": "Redis"
+  "title": "Redis",
+  "tag":"数据库"
 }
 ```
 
@@ -120,7 +121,7 @@ getset <key><value>：以新换旧，设置了新值同时获得旧值。
 
 它的底层实际是个双向链表，对两端的操作性能很高，通过索引下标的操作中间的节点性能会较差。
 
-[![img](https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241239264.png)](https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241239264.png)
+![img](./images/202206241239264.png)
 
 #### 常用命令
 
@@ -170,7 +171,7 @@ lset<key><index><value>：将列表 key 下标为 index 的值替换成 value
 
 ***Redis*** 将链表和 ***ziplist*** 结合起来组成了 ***quicklist***。也就是将多个 ***ziplist*** 使用双向指针串起来使用。这样既满足了快速的插入删除性能，又不会出现太大的空间冗余。
 
-[![img](https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241240221.png)](https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241240221.png)
+![img](./images/202206241240221.png)
 
 ### 集合 Set
 
@@ -291,11 +292,11 @@ zrank <key><value>：返回该值在集合中的排名，从 0 开始。
 
 1. 客户端可以订阅频道
 
-[![img](https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241241271.png)](https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241241271.png)
+![img](./images/202206241241271.png)
 
 1. 当给这个频道发布消息后，消息就会发送给订阅的客户端
 
-[![img](https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241242008.png)](https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241242008.png)
+![img](./images/202206241242008.png)
 
 ```markdown
 subscribe channel # 订阅频道
@@ -312,7 +313,7 @@ publish channel hello # 频道发送信息
 
 **Bitmaps** 单独提供了一套命令， 所以在 **Redis** 中使用 **Bitmaps** 和使用字符串的方法不太相同。 可以把 **Bitmaps** 想象成一个以位为单位的数组， 数组的每个单元只能存储 0 和 1， 数组的下标在 **Bitmaps** 中叫做偏移量。
 
-![img](https://img-blog.csdnimg.cn/8a4a79f6f1a5499594baff4fe2451808.png)
+![img](./images/8a4a79f6f1a5499594baff4fe2451808.png)
 
 #### 常用命令
 
@@ -383,7 +384,7 @@ georadius <key> <longitude> <latitude> radius m|km|ft|mi
 
 ### *Multi*、*Exec*、*Discard*
 
-![img](https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241242519.png)
+![img](./images/202206241242519.png)
 
 从输入 ***Multi*** 命令开始，输入的命令都会依次进入命令队列中，但不会执行，直到输入 ***Exec*** 后，***Redis*** 会将之前的命令队列中的命令依次执行。
 
@@ -391,19 +392,19 @@ georadius <key> <longitude> <latitude> radius m|km|ft|mi
 
 **组队成功，提交成功**：
 
-<img src="https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241243427.png" alt="img" style="zoom:70%;" />
+![img](./images/202206241243427.png)
 
 **放弃组队**：
 
-![img](https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241243951.png)
+![img](./images/202206241243951.png)
 
 **组队中有命令错误，不会执行：** 当组队中某个命令出现了报告错误，执行时整个的所有队列都会被取消。
 
-<img src="https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241244858.png" alt="img" style="zoom:80%;" />
+![img](./images/202206241244858.png)
 
 **组队中不报错，执行时报错：** 当执行时出现错误，队列中其他命令可执行成功
 
-![img](https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241244271.png)
+![img](./images/202206241244271.png)
 
 ### 悲观锁
 
@@ -419,7 +420,7 @@ georadius <key> <longitude> <latitude> radius m|km|ft|mi
 
 ***Redis*** 就是利用这种 ***check-and-set*** 机制实现事务的。
 
-![image-20220905203508380](C:\Users\K\AppData\Roaming\Typora\typora-user-images\image-20220905203508380.png)
+![image](./images/image-20220905203508380.png)
 
 ### Watch、unwatch命令
 
@@ -447,7 +448,7 @@ georadius <key> <longitude> <latitude> radius m|km|ft|mi
 
 在指定的时间间隔内将内存中的数据集快照写入磁盘， 即 ***Snapshot*** 快照，恢复时是将快照文件直接读到内存里。
 
-![img](https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241245966.png)
+![img](./images/202206241245966.png)
 
 ***Redis*** 会单独（***fork***）创建一个子进程来进行持久化。
 
@@ -469,37 +470,37 @@ georadius <key> <longitude> <latitude> radius m|km|ft|mi
 
 在 ***redis.conf*** 中配置文件名称，默认为 ***dump.rdb***。
 
-![img](https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241245089.png)
+![img](./images/202206241245089.png)
 
 **dump 保存位置**
 
 ***rdb*** 文件的保存路径可以修改。默认为 ***Redis*** 启动时命令行所在的目录下。
 
-![img](https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241245951.png)
+![img](./images/202206241245951.png)
 
 ***stop-writes-on-bgsave-error***
 
 即当 ***redis*** 无法写入磁盘，关闭 ***redis*** 的写入操作。
 
-![img](https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241246038.png)
+![img](./images/202206241246038.png)
 
 ***rdbcompression***
 
 持久化的文件是否进行压缩存储。
 
-![img](https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241246917.png)
+![img](./images/202206241246917.png)
 
 ***rdbchecksum***
 
 完整性的检查，即数据是否完整性、准确性。
 
-![img](https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241247735.png)
+![img](./images/202206241247735.png)
 
 ***save***
 
 表示写操作的次数。（格式：save 秒 写操作次数）
 
-![img](https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241247583.png)
+![img](./images/202206241247583.png)
 
 #### 优点
 
@@ -531,15 +532,15 @@ georadius <key> <longitude> <latitude> radius m|km|ft|mi
 
 **AOF 默认不开启**
 
-![img](https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241248962.png)
+![img](./images/202206241248962.png)
 
 **文件名字**
 
-![img](https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241248396.png)
+![img](./images/202206241248396.png)
 
 **AOF 同步频率设置**
 
-![img](https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241249139.png)
+![img](./images/202206241249139.png)
 
 ***appendfsync always***
 
@@ -559,7 +560,7 @@ georadius <key> <longitude> <latitude> radius m|km|ft|mi
 
 当 ***AOF*** 文件的大小超过所设定的阈值时，***Redis*** 就会启动 ***AOF*** 文件的内容压缩，只保留可以恢复数据的最小指令集。可以使用命令 ***bgrewriteaof***。
 
-![img](https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241249997.png)
+![img](./images/202206241249997.png)
 
 #### 优点
 
@@ -587,7 +588,7 @@ georadius <key> <longitude> <latitude> radius m|km|ft|mi
 
 主机数据更新后根据配置和策略， 自动同步到备机的 ***master/slaver*** 机制，***Master*** 以写为主，***Slaver*** 以读为主。
 
-![img](https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241250697.png)
+![img](./images/202206241250697.png)
 
 1. 读写分离，性能扩展
 2. 容灾快速恢复
@@ -621,19 +622,19 @@ dbfilename dump6381.rdb
 
 4. 启动 3 台 ***redis*** 服务器
 
-   ![img](https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241250298.png)
+   ![img](./images/202206241250298.png)
 
 5. 查看主机运行情况 ： info replication
 
-   ![img](https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241251598.png)
+   ![img](./images/202206241251598.png)
 
 6. 配从不配主 ： slaveof  <ip><port>  # 成为某个实例的从服务器
 
-   ![img](https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241251672.png)
+   ![img](./images/202206241251672.png)
 
 7. 再次查看主机运行情况
 
-![img](https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241252641.png)
+![img](./images/202206241252641.png)
 
 成功搭建
 
@@ -655,7 +656,7 @@ dbfilename dump6381.rdb
 
 ### 薪火相传
 
-![img](https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241253497.png)
+![img](./images/202206241253497.png)
 
 上一个 ***slave*** 可以是下一个 ***slave*** 的 ***master***，***slave*** 同样可以接收其他 ***slave***的连接和同步请求，那么该 ***slave*** 作为了链条中下一个的 ***master***，可以有效减轻 ***master*** 的写压力，去中心化降低风险。
 
@@ -692,7 +693,7 @@ dbfilename dump6381.rdb
 
    `redis-sentinel  /opt/etc/sentinel.conf `
 
-   ![img](https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241253197.png)
+   ![img](./images/202206241253197.png)
 
    主机挂掉，会从从机选举产生新的主机
 
@@ -700,7 +701,7 @@ dbfilename dump6381.rdb
 
 - 根据优先级别，***slave-priority/replica-priority***，优先选择优先级靠前的。
 
-  ![img](https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241253826.png)
+  ![img](./images/202206241253826.png)
 
 - 根据偏移量，优先选择偏移量大的。
 
@@ -731,11 +732,11 @@ dbfilename dump6381.rdb
 
 - 代理主机（ ***之前*** ）
 
-![img](https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241254954.png)
+![img](./images/202206241254954.png)
 
 - 无中心化集群配置（ ***redis3.0*** ）
 
-![img](https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241255698.png)
+![img](./images/202206241255698.png)
 
 ***Redis*** 集群实现了对 ***Redis*** 的水平扩容，即启动 ***N*** 个 ***Redis*** 节点，将整个数据库分布存储在这 ***N*** 个节点中，每个节点存储总数据的 ***1/N*** 。
 
@@ -756,17 +757,17 @@ dbfilename dump6381.rdb
    cluster-node-timeout 15000 # 设置节点失联事件，超过该时间（ms），集群自动进行主从切换
    ```
 
-   ![img](https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241255522.png)
+   ![img](./images/202206241255522.png)
 
 2. 启动
 
-   ![img](https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241255653.png)
+   ![img](./images/202206241255653.png)
 
 3. 将6个节点合成一个集群
 
    组合之前请确保所有`redis`实例启动后，`node-xxxx.conf`文件都生成正常
 
-   ![img](https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241256147.png)
+   ![img](./images/202206241256147.png)
 
    ```markdown
    # 进入redis安装目录
@@ -783,7 +784,7 @@ dbfilename dump6381.rdb
    cluster nodes # 命令查看集群信息
    ```
 
-![img](https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241257848.png)
+![img](./images/202206241257848.png)
 
 ### 问题
 
@@ -795,13 +796,13 @@ dbfilename dump6381.rdb
 
 分配原则尽量保证每个主数据库运行在不同的 ***IP*** 地址，每个从库和主库不在一个 ***IP*** 地址上。
 
-![img](https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241258001.png)
+![img](./images/202206241258001.png)
 
 #### **什么是 *slots*？**
 
-![img](https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241259789.png)
+![img](./images/202206241259789.png)
 
-![img](https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241259691.png)
+![img](./images/202206241259691.png)
 
 一个 ***Redis*** 集群包含 ***16384*** 个插槽（***hash slot***）， 数据库中的每个键都属于这 ***16384*** 个插槽的其中一个。
 
@@ -835,7 +836,7 @@ dbfilename dump6381.rdb
 
 如果主节点下线？从节点能否自动升为主节点？注意：***15*** 秒超时。
 
-![img](https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241259357.png)
+![img](./images/202206241259357.png)
 
 - 当 ***6379*** 挂掉后，***6389*** 成为新的主机。
 
@@ -866,7 +867,7 @@ dbfilename dump6381.rdb
 
 ### 缓存穿透
 
-![img](https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241300146.png)
+![img](./images/202206241300146.png)
 
 #### 现象
 
@@ -903,7 +904,7 @@ dbfilename dump6381.rdb
 
 ### 缓存击穿
 
-![img](https://tsuiraku.oss-cn-chengdu.aliyuncs.com/typora/202206241301946.png)
+![img](./images/202206241301946.png)
 
 ***key*** 对应的数据存在，但在 ***redis*** 中过期，此时若有大量并发请求过来，这些请求发现缓存过期一般都会从后端***DB*** 加载数据并回设到缓存，这个时候大并发的请求可能会瞬间把后端 ***DB*** 压垮。
 
