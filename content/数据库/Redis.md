@@ -1,14 +1,8 @@
-~~~json
-```
-    ```json
-    {
+```json
+	{
         "date":"2022.12.09 15:33"，
     }
-    ```
 ```
-~~~
-
-# Redis
 
 ***Redis*** 是典型的 ***NoSQL*** 数据库。
 
@@ -115,7 +109,7 @@ getset <key><value>：以新换旧，设置了新值同时获得旧值。
 
 当字符串长度小于1M时，扩容都是加倍现有的空间，如果超过1M，扩容时只会多扩1M的空间，字符串最大长度是512M
 
-![img](./assets/images/202206241239397.png)
+![img](./images/202206241239397.png)
 
 ### 列表 list
 
@@ -960,3 +954,4 @@ dbfilename dump6381.rdb
 ### 分布式锁
 
 https://blog.csdn.net/Me_xuan/article/details/124418176
+
