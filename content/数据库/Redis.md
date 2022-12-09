@@ -4,8 +4,6 @@
     }
 ```
 
-# Redis
-
 ***Redis*** 是典型的 ***NoSQL*** 数据库。
 
 ***redis官网***：https://redis.io/download
