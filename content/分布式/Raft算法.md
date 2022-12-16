@@ -1,7 +1,7 @@
 ```json
 {
   "date": "2022.12.16 16:30",
-  "title": "Raft共识",
+  "title": "Raft分布式容错共识算法",
   "tag":"分布式"
 }
 ```
@@ -24,7 +24,7 @@ Raft主要做了两方面的事情：
 
 Raft算法中实现了一种复制状态机，leader将客户端请求(command) 封装到一个个log entry中，将这些log entry复制到所有follower节点，然后大家按相同顺序应用log entries中的command，根据复制状态机的理论，大家的结束状态肯定是一致的。
 
-![image](./image\2022121601.png)
+![img](./image\2022121601.png)
 
 可以说，我们使用共识算法，就是为了实现复制状态机。一个分布式场景下的各节点间，就是通过共识算法来保证命令序列的一致，从而始终保持它们的**状态一致**，从而实现高可用的。（投票选主是一种特殊的命令）
 
@@ -32,13 +32,13 @@ Raft算法中实现了一种复制状态机，leader将客户端请求(command) 
 
 Raft 中的节点有 3 种状态，**领导者（Leader）**，**候选人（Candidate）**和**跟随者（Follower）**。
 
-![image](./image/2022121602.png)
+![img](./image/2022121602.png)
 
 Raft把时间分割成任意长度的**任期（term）**，任期用连续的整数标记
 
 每一段任期从一次选举开始。在某些情况下，一次选举无法选出leader（比如两个节点收到了相同的票数），在这种情况下，这一任期会以没有leader结束；一个新的任期（包含一次新的选举）会很快重新开始。Raft保证在任意一个任期内，最多只有一个leader
 
-![image](./image/2022121603.png)
+![img](./image/2022121603.png)
 
 Raft 节点之间通过 **RPC**（Remote Prcedure Cal，远程过程调用）来进行通信。
 
@@ -58,7 +58,7 @@ Raft 论文中指定了两种方法用于节点的通信：
 
 Raft内部有一种**心跳机制**，如果存在leader，那么它就会周期性地向所有follower发送心跳，来维持自己的地位。如果follower一段时间没有收到心跳，那么他就会认为系统中没有可用的leader了，然后开始进行选举。
 
-![image](./image/2022121604.png)
+![img](./image/2022121604.png)
 
 开始一个选举过程后，follower先**增加自己的当前任期号**，并转换到**candidate**状态。然后**投票给自己**，并且并行地向集群中的其他服务器节点发送投票请求（RequestVote RPC）
 
@@ -93,7 +93,7 @@ type RequestVoteResponse struct{
 
 Leader被选举出来后，开始为客户端请求提供服务。Leader接收到客户端的指令后，会把指令作为一个新的Entry追加到**日志**中去（日志中包含日志号（日志索引）、leader的任期号、状态机指令）。Leader**并行**发送**AppendEntries RPC**给follower，让它们复制该Entry。当该Entry被**超过半数**的follower复制后，leader就可以在**本地执行该指令**并**把结果返回客户端**。我们把本地执行指令，也就是leader应用日志与状态机这一步，称作**提交（Committed）。**
 
-![image](./image/2022121605.png)
+![img](./image/2022121605.png)
 
 在此过程中，leader或follower随时都有崩溃或缓慢的可能性，Raft必须要在有宕机的情况下继续支持日志复制，并且保证每个副本日志顺序的一致（以保证复制状态机的实现）。具体有三种可能：
 
@@ -105,7 +105,7 @@ Leader被选举出来后，开始为客户端请求提供服务。Leader接收�
 
 3. Raft在这种情况下，leader通过**强制follower复制它的日志**来解决不一致的问题，这意味着follower中跟leader冲突的日志条目会被新leader的日志条目覆盖（因为没有提交，所以不违背外部一致性）。
 
-![image](./image/2022121606.png)
+![img](./image/2022121606.png)
 
 通过这种机制，leader在当权之后就**不需要任何特殊的操作**来使日志恢复到一致状态。Leader只需要进行正常的操作，然后日志就能在回复AppendEntries一致性检查失败的时候**自动**趋于一致。
 
@@ -158,7 +158,7 @@ type AppendEntriesResponse struct{
 
    (2)**如果两份日志最后条目的任期号相同，那么日志较长的那个更“新”** 。
 
-   ![image](./image/2022121607.png)
+   ![img](./image/2022121607.png)
 
 2. **Leader宕机处理：新leader是否提交之前任期内的日志条目**
 
